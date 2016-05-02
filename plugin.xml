@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="com.worldline.cordova.wifiVerify"
+        version="0.0.1">
+    <name>Wifi Plugin</name>
+    <description>A plugin to test wifi availability</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,plugin,wifi</keywords>
+    <repo>https://github.com/mamhf/cordova-plugin-wifiverify.git</repo>
+    <issue>https://github.com/mamhf/cordova-plugin-wifiverify/issues</issue>
+    <platform name="android">
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+        </config-file>
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="AlertPlugin" >
+            <param name="android-package" value="com.example.cordova.alert.AlertPlugin"/>
+            </feature>
+        </config-file>
+        <source-file src="src/android/AlertPlugin.java" target-dir="src/com/example/cordova/alert"/>
+    </platform>
+    <js-module src="www/plugin.js" name="Wifi">
+        <clobbers target="cordova.plugins.Wifi" />
+    </js-module>
+</plugin>
