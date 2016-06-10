@@ -7,8 +7,8 @@
     <description>A plugin to test wifi availability</description>
     <license>Apache 2.0</license>
     <keywords>cordova,plugin,wifi</keywords>
-    <repo>https://github.com/mamhf/cordova-plugin-wifiverify.git</repo>
-    <issue>https://github.com/mamhf/cordova-plugin-wifiverify/issues</issue>
+    <repo>https://github.com/worldline/cordova-plugin-wifiverify.git</repo>
+    <issue>https://github.com/worldline/cordova-plugin-wifiverify/issues</issue>
     <platform name="android">
         <config-file target="AndroidManifest.xml" parent="/manifest">
             <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
