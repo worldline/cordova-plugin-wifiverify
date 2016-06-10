@@ -15,7 +15,14 @@ import android.net.wifi.WifiInfo;
 import java.util.List;
 import android.net.wifi.ScanResult; 
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+
+import java.util.Calendar;
 public class AlertPlugin extends CordovaPlugin {
+  AlarmManagerBroadcastReceiver alarm;
   WifiManager wifiManager;
   WifiInfo info;
   Context context;
@@ -24,6 +31,9 @@ public class AlertPlugin extends CordovaPlugin {
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
     if("alert".equals(action)){
       Context context=this.cordova.getActivity().getApplicationContext(); 
+	  alarm = new AlarmManagerBroadcastReceiver();
+      alarm.SetAlarm(context);
+      
       final String content = args.getString(0);
       wifiManager = (WifiManager) context.getSystemService(context.WIFI_SERVICE);
       info = wifiManager.getConnectionInfo();
@@ -59,4 +69,48 @@ public class AlertPlugin extends CordovaPlugin {
     });
     alertDialog.show();
   }
+
+ class AlarmManagerBroadcastReceiver extends BroadcastReceiver{
+
+    final public static String ONE_TIME = "onetime";
+    Calendar cal;
+
+    public AlarmManagerBroadcastReceiver(){
+        cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.clear();
+
+
+        cal.set(2016, 04, 03, 13, 51);
+    }
+    @Override
+    public void onReceive(Context context, Intent intent) {
+
+        if(System.currentTimeMillis()>cal.getTimeInMillis()){
+            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            wifiManager.setWifiEnabled(true);
+            System.out.print("hello");
+            CancelAlarm(context);
+        }
+    }
+    public void SetAlarm(Context context)
+    {
+        AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
+        PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
+        //After after 30 seconds.
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), cal.getTimeInMillis() - System.currentTimeMillis(), pi);
+
+    }
+
+    public void CancelAlarm(Context context)
+    {
+        Intent intent = new Intent(context, AlarmManagerBroadcastReceiver.class);
+        PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(sender);
+    }
+
+
+}
 }
